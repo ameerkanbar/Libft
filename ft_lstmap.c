@@ -1,25 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putendl_fd.c                                    :+:      :+:    :+:   */
+/*   ft_lstmap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mknbar <mknbar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/03 16:37:37 by mknbar            #+#    #+#             */
-/*   Updated: 2025/06/01 16:52:39 by mknbar           ###   ########.fr       */
+/*   Created: 2025/06/01 20:02:19 by mknbar            #+#    #+#             */
+/*   Updated: 2025/06/01 20:10:47 by mknbar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_putendl_fd(char *s, int fd)
+t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 {
-	if (!s)
-		return ;
-	while (*s)
+	t_list	*new;
+	t_list	*node;
+
+	if (!f || !del)
+		return (NULL);
+	new = NULL;
+	while (lst)
 	{
-		write(fd, s, 1);
-		s++;
+		node = ft_lstnew(f(lst->content));
+		if (!node)
+		{
+			ft_lstclear(&new, del);
+			return (NULL);
+		}
+		ft_lstadd_back(&new, node);
+		lst = lst->next;
 	}
-	write(fd, "\n", 1);
+	return (new);
 }
